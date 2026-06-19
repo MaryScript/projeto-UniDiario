@@ -27,6 +27,7 @@ classDiagram
         -String periodo
         -Disciplina disciplina
         -Professor professor
+        -List~Matricula~ matriculas
     }
 
     class Aula {
@@ -43,16 +44,7 @@ classDiagram
         -LocalDate dataPrazo
         -Turma turma
     }
-
-    class Projeto {
-        -int idProjeto
-        -String titulo
-        -String tipo
-        -LocalDate dataInicio
-        -LocalDate dataFin
-    }
-
-    %% --- CLASSES INTERMÉDIAS (Muitos-para-Muitos) ---
+    
     class Matricula {
         -Aluno aluno
         -Turma turma
@@ -62,48 +54,35 @@ classDiagram
         +verificarSituacao() String
     }
 
-    class Frequencia {
-        -Aluno aluno
-        -Aula aula
-        -boolean frequentou
+    class Projeto {
+        -int idProjeto
+        -String titulo
+        -String tipo
+        -LocalDate dataInicio
+        -LocalDate dataFim
+        -List~Aluno~ alunosParticipantes
+        -List~Professor~ professoresOrientadores
     }
 
-    class Nota {
-        -Aluno aluno
-        -Avaliacao avaliacao
-        -double notaObtida
-    }
 
-    class ParticipacaoProjeto {
-        -Aluno aluno
-        -Projeto projeto
-        -String funcaoAluno
-        -int horasDedicadas
-    }
+   %% Relacionamento Disciplina e Professor com a Turma
+    Disciplina "1" <-- "0..*" Turma : baseia-se em
+    Professor "1" <-- "0..*" Turma : ministra
+    
+    %% Relacionamento Bidirecional: Turma, Aula e Avaliação
+    Turma "1" *--> "0..*" Aula : possui (Composição)
+    Aula "1" --> "1" Turma : pertence a
+    
+    Turma "1" *--> "0..*" Avaliacao : contém (Composição)
+    Avaliacao "1" --> "1" Turma : pertence a
 
-    class OrientacaoProjeto {
-        -Professor professor
-        -Projeto projeto
-    }
+    %% A Classe Intermédia Matricula unindo Aluno e Turma (Bidirecional)
+    Aluno "1" <-- "0..*" Matricula : associado a
+    Matricula "1" --> "1" Aluno : pertence a
+    
+    Turma "1" <-- "0..*" Matricula : possui inscritos
+    Matricula "1" --> "1" Turma : vinculada a
 
-    %% --- RELACIONAMENTOS ---
-    Disciplina "1" -- "0..*" Turma : origina
-    Professor "1" -- "0..*" Turma : ministra
-    Turma "1" -- "0..*" Aula : possui
-    Turma "1" -- "0..*" Avaliacao : contem
-
-    %% Relações N:N resolvidas pelas classes intermédias
-    Aluno "1" -- "0..*" Matricula : possui
-    Turma "1" -- "0..*" Matricula : contem
-
-    Aluno "1" -- "0..*" Frequencia : registra
-    Aula "1" -- "0..*" Frequencia : contem
-
-    Aluno "1" -- "0..*" Nota : possui
-    Avaliacao "1" -- "0..*" Nota : avalia
-
-    Aluno "1" -- "0..*" ParticipacaoProjeto : atua
-    Projeto "1" -- "0..*" ParticipacaoProjeto : possui
-
-    Professor "1" -- "0..*" OrientacaoProjeto : orienta
-    Projeto "1" -- "0..*" OrientacaoProjeto : supervisiona
+    %% Relações do Módulo de Pesquisa e Extensão (Projetos)
+    Projeto "0..*" --> "0..*" Aluno : alunosParticipantes (List)
+    Projeto "0..*" --> "0..*" Professor : professoresOrientadores (List)
