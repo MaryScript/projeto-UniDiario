@@ -1,6 +1,6 @@
 # UniDiario - UnDF
 
-Sistema de gestão acadêmica e diário de classe desenvolvido para a UnDF. O projeto foi feito em Java e estruturado usando POO para controlar notas, faltas, turmas e projetos de pesquisa/extensão.
+Sistema de gestão acadêmica e diário de classe desenvolvido para a disciplina de Projeto Aplicado IV. O projeto foi feito em Java e estruturado usando POO para controlar notas, faltas, turmas e projetos de pesquisa/extensão.
 
 ## Tecnologias
 * Java 17
